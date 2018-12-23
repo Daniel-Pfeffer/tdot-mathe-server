@@ -1,13 +1,10 @@
-var Person = require('./person.js');
+let Person = require('./person.js');
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 let personArray = [];
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+
 app.listen(8080, () => {
     console.log('Server started');
     fileRead();
@@ -18,8 +15,8 @@ app.route('/tdot/getAll').get((req, res) => {
     res.send({
         personArray: personArray
     });
-});
 
+});
 
 app.route('/tdot/addGuess').put((req, res) => {
     let body = '';
@@ -45,11 +42,8 @@ app.route('/tdot/getPerson').post((req, res) => {
     });
     req.on('end', () => {
         let data = JSON.parse(body);
-        if(findPerson(data)){
-            res.status(418).send("lel")
-        } else {
-            res.status(200).send("ok")
-        }
+        const person = findRealPerson(data);
+        res.status(200).send(person)
     });
 });
 
@@ -63,15 +57,25 @@ function fileRead() {
 
 function fileWrite() {
     let data = JSON.stringify(personArray);
-    fs.writeFile('persons.json', data)
+    fs.writeFileSync('persons.json', data)
 }
 
 function findPerson(data) {
     const mail = data['mail'];
     for (let personArrayElement of personArray) {
-        if(personArrayElement.mail === mail){
+        if (personArrayElement.mail === mail) {
             return true
         }
     }
     return false;
+}
+
+function findRealPerson(data) {
+    const mail = data['mail'];
+    for (let personArrayElement of personArray) {
+        if (personArrayElement.mail === mail) {
+            return personArrayElement
+        }
+    }
+    return null;
 }
