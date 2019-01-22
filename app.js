@@ -34,7 +34,6 @@ app.route('/tdot/getAll').get((req, res) => {
     res.send({
         personArray: personArray
     });
-
 });
 
 app.route('/tdot/addGuess').post((req, res) => {
@@ -45,12 +44,13 @@ app.route('/tdot/addGuess').post((req, res) => {
     });
     req.on('end', () => {
         let data = JSON.parse(body);
+        console.log(data);
         if (!findPerson(data)) {
-            personArray.push(new Person(data['name'], data['mail'], data['guess']));
+            personArray.push(new Person(data['name'], data['mail'], data['guess'], data['gummy'], data['mAndMs']));
             fileWrite();
-            res.end('ok')
+            res.sendStatus(200)
         } else {
-            res.end('wot m8');
+            res.sendStatus(418)
         }
     });
 });
@@ -72,7 +72,7 @@ function fileRead() {
     let data = fs.readFileSync('persons.json');
     let persons = JSON.parse(data);
     for (let personsKey in persons) {
-        personArray.push(new Person(persons[personsKey]['name'], persons[personsKey]['mail'], persons[personsKey]['guess']));
+        personArray.push(new Person(persons[personsKey]['name'], persons[personsKey]['mail'], persons[personsKey]['guess'], persons[personsKey]['gummy'], persons[personsKey]['mAndMs']));
     }
 }
 

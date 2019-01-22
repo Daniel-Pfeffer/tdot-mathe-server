@@ -8,9 +8,17 @@
 
 module.exports = class Person {
 
-    constructor(name, mail, guess) {
+    /*
+    guess is a integer
+    guessGummybear is a float which defines kg
+    guessmandM is a float and defines gram
+     */
+
+    constructor(name, mail, guess, guessGummybear, guessMandM) {
         this.name = name;
         this.mail = mail;
         this.guess = guess;
+        this.guessGummybear = guessGummybear;
+        this.guessMandM = guessMandM;
     }
 };
